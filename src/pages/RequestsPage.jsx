@@ -21,7 +21,7 @@ const mockRequests = [
     skillOffered: "React",
     skillWanted: "Python",
     message: "Hi! I'd love to help you with React in exchange for some Python fundamentals. I have 3 years of React experience.",
-    status: "pending" as const,
+    status: "pending",
     createdAt: "2024-01-15T10:30:00Z"
   },
   {
@@ -34,7 +34,7 @@ const mockRequests = [
     skillOffered: "Machine Learning",
     skillWanted: "TypeScript",
     message: "I can teach you ML concepts and Python libraries. Would be great to learn TypeScript from you!",
-    status: "pending" as const,
+    status: "pending",
     createdAt: "2024-01-14T15:45:00Z"
   },
   {
@@ -47,7 +47,7 @@ const mockRequests = [
     skillOffered: "Figma",
     skillWanted: "React",
     message: "I'm a designer looking to learn frontend development. Can help with Figma and design systems!",
-    status: "accepted" as const,
+    status: "accepted",
     createdAt: "2024-01-13T09:20:00Z"
   },
   {
@@ -60,21 +60,12 @@ const mockRequests = [
     skillOffered: "AWS",
     skillWanted: "Node.js",
     message: "I have AWS certifications and can help with cloud architecture. Looking to improve my Node.js skills.",
-    status: "rejected" as const,
+    status: "rejected",
     createdAt: "2024-01-12T14:10:00Z"
   }
 ];
 
-interface RequestsPageProps {
-  user: {
-    id: string;
-    name: string;
-    avatar?: string;
-  };
-  onLogout: () => void;
-}
-
-export default function RequestsPage({ user, onLogout }: RequestsPageProps) {
+export default function RequestsPage({ user, onLogout }) {
   const [filter, setFilter] = useState("all");
   const [requests, setRequests] = useState(mockRequests);
 
@@ -83,10 +74,10 @@ export default function RequestsPage({ user, onLogout }: RequestsPageProps) {
     return request.status === filter;
   });
 
-  const handleAccept = (requestId: string) => {
+  const handleAccept = (requestId) => {
     setRequests(prev => 
       prev.map(req => 
-        req.id === requestId ? { ...req, status: "accepted" as const } : req
+        req.id === requestId ? { ...req, status: "accepted" } : req
       )
     );
     
@@ -97,10 +88,10 @@ export default function RequestsPage({ user, onLogout }: RequestsPageProps) {
     });
   };
 
-  const handleReject = (requestId: string) => {
+  const handleReject = (requestId) => {
     setRequests(prev => 
       prev.map(req => 
-        req.id === requestId ? { ...req, status: "rejected" as const } : req
+        req.id === requestId ? { ...req, status: "rejected" } : req
       )
     );
     
@@ -111,7 +102,7 @@ export default function RequestsPage({ user, onLogout }: RequestsPageProps) {
     });
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status) => {
     switch (status) {
       case "pending":
         return <Badge variant="outline" className="text-orange-600 border-orange-600"><Clock className="w-3 h-3 mr-1" />Pending</Badge>;
@@ -124,7 +115,7 @@ export default function RequestsPage({ user, onLogout }: RequestsPageProps) {
     }
   };
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { 
       month: 'short', 
@@ -208,9 +199,8 @@ export default function RequestsPage({ user, onLogout }: RequestsPageProps) {
                 {request.status === "pending" && (
                   <div className="flex space-x-3">
                     <Button
-                      variant="success"
                       onClick={() => handleAccept(request.id)}
-                      className="flex-1"
+                      className="flex-1 bg-green-600 hover:bg-green-700"
                     >
                       <Check className="w-4 h-4 mr-2" />
                       Accept
@@ -238,15 +228,6 @@ export default function RequestsPage({ user, onLogout }: RequestsPageProps) {
                 : `No ${filter} requests found.`
               }
             </p>
-          </div>
-        )}
-
-        {/* Pagination */}
-        {filteredRequests.length > 0 && (
-          <div className="flex justify-center space-x-2 mt-8">
-            <Button variant="outline" disabled>Previous</Button>
-            <Button variant="default">1</Button>
-            <Button variant="outline">Next</Button>
           </div>
         )}
       </div>

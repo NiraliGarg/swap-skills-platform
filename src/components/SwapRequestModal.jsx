@@ -5,28 +5,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-interface SwapRequestModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (request: {
-    skillOffered: string;
-    skillWanted: string;
-    message: string;
-  }) => void;
-  targetUser: {
-    name: string;
-    skillsWanted: string[];
-  };
-  currentUserSkills: string[];
-}
-
 export function SwapRequestModal({ 
   isOpen, 
   onClose, 
   onSubmit, 
   targetUser, 
   currentUserSkills 
-}: SwapRequestModalProps) {
+}) {
   const [skillOffered, setSkillOffered] = useState("");
   const [skillWanted, setSkillWanted] = useState("");
   const [message, setMessage] = useState("");

@@ -8,27 +8,11 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Header } from "@/components/Header";
-import { X, Plus, User, Upload } from "lucide-react";
+import { X, Plus, User, Upload, Camera } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import avatarPlaceholder from "@/assets/avatar-placeholder.png";
 
-interface ProfilePageProps {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    location?: string;
-    avatar?: string;
-    skillsOffered: string[];
-    skillsWanted: string[];
-    availability?: string;
-    isPublic: boolean;
-  };
-  onUpdateUser: (user: any) => void;
-  onLogout: () => void;
-}
-
-export default function ProfilePage({ user, onUpdateUser, onLogout }: ProfilePageProps) {
+export default function ProfilePage({ user, onUpdateUser, onLogout }) {
   const [formData, setFormData] = useState({
     name: user.name,
     location: user.location || "",
@@ -42,7 +26,7 @@ export default function ProfilePage({ user, onUpdateUser, onLogout }: ProfilePag
   const [newSkillWanted, setNewSkillWanted] = useState("");
   const [hasChanges, setHasChanges] = useState(false);
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     setHasChanges(true);
   };
@@ -55,7 +39,7 @@ export default function ProfilePage({ user, onUpdateUser, onLogout }: ProfilePag
     }
   };
 
-  const handleRemoveSkillOffered = (skill: string) => {
+  const handleRemoveSkillOffered = (skill) => {
     setSkillsOffered(skillsOffered.filter(s => s !== skill));
     setHasChanges(true);
   };
@@ -68,7 +52,7 @@ export default function ProfilePage({ user, onUpdateUser, onLogout }: ProfilePag
     }
   };
 
-  const handleRemoveSkillWanted = (skill: string) => {
+  const handleRemoveSkillWanted = (skill) => {
     setSkillsWanted(skillsWanted.filter(s => s !== skill));
     setHasChanges(true);
   };
@@ -103,10 +87,29 @@ export default function ProfilePage({ user, onUpdateUser, onLogout }: ProfilePag
   };
 
   const handleUploadPhoto = () => {
-    toast({
-      title: "Photo Upload",
-      description: "Photo upload functionality would be implemented here.",
-    });
+    // Create a file input element
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const updatedUser = {
+            ...user,
+            avatar: e.target.result
+          };
+          onUpdateUser(updatedUser);
+          toast({
+            title: "Profile Picture Updated",
+            description: "Your profile picture has been updated successfully.",
+          });
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
   };
 
   return (
@@ -122,16 +125,26 @@ export default function ProfilePage({ user, onUpdateUser, onLogout }: ProfilePag
           <CardContent className="space-y-6">
             {/* Profile Photo */}
             <div className="flex items-center space-x-4">
-              <Avatar className="w-20 h-20">
-                <AvatarImage src={user.avatar || avatarPlaceholder} />
-                <AvatarFallback>
-                  <User className="w-10 h-10" />
-                </AvatarFallback>
-              </Avatar>
-              <Button variant="outline" onClick={handleUploadPhoto}>
-                <Upload className="w-4 h-4 mr-2" />
-                Change Photo
-              </Button>
+              <div className="relative">
+                <Avatar className="w-20 h-20 cursor-pointer group" onClick={handleUploadPhoto}>
+                  <AvatarImage src={user.avatar || avatarPlaceholder} />
+                  <AvatarFallback>
+                    <User className="w-10 h-10" />
+                  </AvatarFallback>
+                  <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-full flex items-center justify-center">
+                    <Camera className="w-6 h-6 text-white" />
+                  </div>
+                </Avatar>
+              </div>
+              <div>
+                <Button variant="outline" onClick={handleUploadPhoto}>
+                  <Upload className="w-4 h-4 mr-2" />
+                  Change Photo
+                </Button>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Click avatar or button to update
+                </p>
+              </div>
             </div>
 
             {/* Basic Info */}

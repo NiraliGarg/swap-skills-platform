@@ -11,7 +11,7 @@ import { toast } from "@/hooks/use-toast";
 import avatarPlaceholder from "@/assets/avatar-placeholder.png";
 
 // Mock user data (in real app, this would come from API)
-const mockUserData: Record<string, any> = {
+const mockUserData = {
   "1": {
     id: "1",
     name: "Sarah Chen",
@@ -21,9 +21,7 @@ const mockUserData: Record<string, any> = {
     skillsWanted: ["Python", "Machine Learning", "Data Analysis", "Django", "SQL"],
     rating: 4.8,
     availability: "Weekends, Evenings after 6PM",
-    bio: "Frontend developer with 5 years of experience. Passionate about creating beautiful, accessible user interfaces. Looking to expand my skills into data science and backend development.",
-    completedSwaps: 12,
-    responseTime: "Usually responds within 2 hours"
+    bio: "Frontend developer with 5 years of experience. Passionate about creating beautiful, accessible user interfaces. Looking to expand my skills into data science and backend development."
   },
   "2": {
     id: "2", 
@@ -34,23 +32,11 @@ const mockUserData: Record<string, any> = {
     skillsWanted: ["React", "Mobile Development", "Cloud Architecture", "DevOps"],
     rating: 4.5,
     availability: "Weekdays after 6PM, Some weekends",
-    bio: "Data scientist and backend developer. Love working with ML algorithms and building scalable systems. Interested in learning modern frontend frameworks.",
-    completedSwaps: 8,
-    responseTime: "Usually responds within 4 hours"
+    bio: "Data scientist and backend developer. Love working with ML algorithms and building scalable systems. Interested in learning modern frontend frameworks."
   }
 };
 
-interface UserDetailPageProps {
-  user?: {
-    id: string;
-    name: string;
-    avatar?: string;
-    skillsOffered: string[];
-  };
-  onLogout?: () => void;
-}
-
-export default function UserDetailPage({ user, onLogout }: UserDetailPageProps) {
+export default function UserDetailPage({ user, onLogout }) {
   const { userId } = useParams();
   const navigate = useNavigate();
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
@@ -81,7 +67,7 @@ export default function UserDetailPage({ user, onLogout }: UserDetailPageProps) 
     setIsRequestModalOpen(true);
   };
 
-  const handleSubmitRequest = (request: any) => {
+  const handleSubmitRequest = (request) => {
     toast({
       title: "Request Sent!",
       description: `Your skill swap request has been sent to ${profileUser.name}.`,
@@ -130,7 +116,6 @@ export default function UserDetailPage({ user, onLogout }: UserDetailPageProps) 
                       <div className="flex items-center space-x-1">
                         <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                         <span className="font-medium">{profileUser.rating}/5</span>
-                        <span className="text-muted-foreground">({profileUser.completedSwaps} swaps)</span>
                       </div>
                     </div>
 
@@ -140,10 +125,6 @@ export default function UserDetailPage({ user, onLogout }: UserDetailPageProps) 
                         {profileUser.availability}
                       </div>
                     )}
-
-                    <p className="text-muted-foreground">
-                      {profileUser.responseTime}
-                    </p>
                   </div>
                 </div>
 
@@ -160,7 +141,7 @@ export default function UserDetailPage({ user, onLogout }: UserDetailPageProps) 
                   <div>
                     <h3 className="font-semibold mb-3">Skills They Offer</h3>
                     <div className="flex flex-wrap gap-2">
-                      {profileUser.skillsOffered.map((skill: string, index: number) => (
+                      {profileUser.skillsOffered.map((skill, index) => (
                         <Badge key={index} variant="secondary">
                           {skill}
                         </Badge>
@@ -171,7 +152,7 @@ export default function UserDetailPage({ user, onLogout }: UserDetailPageProps) 
                   <div>
                     <h3 className="font-semibold mb-3">Skills They Want to Learn</h3>
                     <div className="flex flex-wrap gap-2">
-                      {profileUser.skillsWanted.map((skill: string, index: number) => (
+                      {profileUser.skillsWanted.map((skill, index) => (
                         <Badge key={index} variant="outline">
                           {skill}
                         </Badge>
@@ -203,12 +184,8 @@ export default function UserDetailPage({ user, onLogout }: UserDetailPageProps) 
 
             <Card>
               <CardContent className="p-6">
-                <h3 className="font-semibold mb-3">Stats</h3>
+                <h3 className="font-semibold mb-3">Profile Info</h3>
                 <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Completed Swaps</span>
-                    <span className="font-medium">{profileUser.completedSwaps}</span>
-                  </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Rating</span>
                     <span className="font-medium">{profileUser.rating}/5</span>
@@ -216,6 +193,10 @@ export default function UserDetailPage({ user, onLogout }: UserDetailPageProps) 
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Skills Offered</span>
                     <span className="font-medium">{profileUser.skillsOffered.length}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Skills Wanted</span>
+                    <span className="font-medium">{profileUser.skillsWanted.length}</span>
                   </div>
                 </div>
               </CardContent>
