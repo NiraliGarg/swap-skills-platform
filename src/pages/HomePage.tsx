@@ -90,7 +90,7 @@ export default function HomePage({ user, onLogout }: HomePageProps) {
       u.skillsWanted.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase())) ||
       u.name.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesAvailability = availabilityFilter === "" || 
+    const matchesAvailability = availabilityFilter === "" || availabilityFilter === "all" || 
       u.availability?.toLowerCase().includes(availabilityFilter.toLowerCase());
     
     return matchesSearch && matchesAvailability;
@@ -149,7 +149,7 @@ export default function HomePage({ user, onLogout }: HomePageProps) {
                   <SelectValue placeholder="Filter by availability" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All availability</SelectItem>
+                  <SelectItem value="all">All availability</SelectItem>
                   <SelectItem value="weekends">Weekends</SelectItem>
                   <SelectItem value="evenings">Evenings</SelectItem>
                   <SelectItem value="weekdays">Weekdays</SelectItem>
