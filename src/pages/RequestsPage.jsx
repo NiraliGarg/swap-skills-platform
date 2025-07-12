@@ -197,10 +197,10 @@ export default function RequestsPage({ user, onLogout }) {
 
                 {/* Action Buttons */}
                 {request.status === "pending" && (
-                  <div className="flex justify-end gap-x-4 mt-4">
+                  <div className="flex space-x-3">
                     <Button
                       onClick={() => handleAccept(request.id)}
-                      className="bg-green-600 hover:bg-green-700 text-white px-6 py-2"
+                      className="flex-1 bg-green-600 hover:bg-green-700"
                     >
                       <Check className="w-4 h-4 mr-2" />
                       Accept
@@ -208,7 +208,7 @@ export default function RequestsPage({ user, onLogout }) {
                     <Button
                       variant="destructive"
                       onClick={() => handleReject(request.id)}
-                      className="px-6 py-2"
+                      className="flex-1"
                     >
                       <X className="w-4 h-4 mr-2" />
                       Reject
